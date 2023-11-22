@@ -5,10 +5,11 @@ import 'flatpickr/dist/flatpickr.min.css';
 const refs = {
   input: document.querySelector('#datetime-picker'),
   startBtn: document.querySelector('button[data-start]'),
-  days: document.querySelector('span[data-days]'),
-  hours: document.querySelector('span[data-hours]'),
-  minutes: document.querySelector('span[data-minutes]'),
-  seconds: document.querySelector('span[data-seconds]'),
+  timer: document.querySelector('.timer'),
+  // days: document.querySelector('span[data-days]'),
+  // hours: document.querySelector('span[data-hours]'),
+  // minutes: document.querySelector('span[data-minutes]'),
+  // seconds: document.querySelector('span[data-seconds]'),
 };
 
 let unixTime = null;
@@ -27,11 +28,13 @@ const options = {
       // alert('Please choose a date in the future');
       Notify.failure('Please choose a date in the future');
       refs.startBtn.disabled = true;
+      clearInterval(intervalId);
       clearData();
       return;
     }
 
     if (intervalId) {
+      clearInterval(intervalId);
       clearData();
     }
 
@@ -51,11 +54,12 @@ function onClick() {
 }
 
 function clearData() {
-  clearInterval(intervalId);
-  refs.days.textContent = '00';
-  refs.hours.textContent = '00';
-  refs.minutes.textContent = '00';
-  refs.seconds.textContent = '00';
+  refs.timer.innerHTML = '<p>00:00:00:00</p>';
+
+  // refs.days.textContent = '00';
+  // refs.hours.textContent = '00';
+  // refs.minutes.textContent = '00';
+  // refs.seconds.textContent = '00';
 }
 
 function dateValidation(selectedDates) {
@@ -77,10 +81,17 @@ function startCount() {
 }
 
 function setDate({ days, hours, minutes, seconds }) {
-  refs.days.textContent = addLeadingZero(days);
-  refs.hours.textContent = addLeadingZero(hours);
-  refs.minutes.textContent = addLeadingZero(minutes);
-  refs.seconds.textContent = addLeadingZero(seconds);
+  refs.timer.innerHTML = `<p>
+  ${addLeadingZero(days)}:${addLeadingZero(hours)}:${addLeadingZero(
+    minutes
+  )}:${addLeadingZero(seconds)}
+  </p>`;
+  refs.timer.classList.add('active');
+
+  // refs.days.textContent = addLeadingZero(days);
+  // refs.hours.textContent = addLeadingZero(hours);
+  // refs.minutes.textContent = addLeadingZero(minutes);
+  // refs.seconds.textContent = addLeadingZero(seconds);
 }
 
 function addLeadingZero(element) {
